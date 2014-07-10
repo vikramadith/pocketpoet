@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="css/jquery.mobile-1.4.3.css" />
+<link rel="stylesheet" href="css/main.css" />
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/jquery.mobile.custom.min.js"></script>
+<script>
+	$(function() {
+		$("[data-role='navbar']").navbar();
+		$("[data-role='header'], [data-role='footer']").toolbar();
+	});
+
+	$(document).on("pagecontainershow", function() {
+		ScaleContentToDevice();
+	});
+
+	function onNav(location) {
+		//$.mobile.navigate(location);
+		$.mobile.changePage(location, {transition: "slidedown"});
+	}
+
+	function ScaleContentToDevice() {
+		scroll(0, 0);
+		var content = $.mobile.getScreenHeight()
+				- $(".ui-header").outerHeight() - $(".ui-footer").outerHeight()
+				- $(".ui-content").outerHeight() + $(".ui-content").height();
+		$(".ui-content").height(content);
+		
+	}
+</script>
+
+</head>
+
+<body>
+
+	<div data-role="header" data-position="fixed" data-theme="a">
+		<h1>Pocket Poet</h1>
+		<div data-role="navbar">
+			<ul>
+				<li>
+					<div class="filterBox filterBoxRhyme" onclick="onNav('#rhyme');">Rhyme</div>
+				</li>
+				<li>
+					<div class="filterBox filterBoxSyllables"
+						onclick="onNav('#syllables');">Syllables</div>
+				</li>
+				<li>
+					<div class="filterBox filterBoxScansion"
+						onclick="onNav('#scansion');">Scansion</div>
+				</li>
+				<li>
+					<div class="filterBox filterBoxMeaning"
+						onclick="onNav('#meaning');">Meaning</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div data-role="page" id="home" data-title="Home" class="homePage">
+
+		<div data-role="main" class="ui-content"></div>
+		<!-- /content -->
+
+	</div>
+	<!-- /page -->
+
+	<div data-role="page" id="rhyme" data-title="rhyme" class="rhymePage">
+
+		<div data-role="main" class="ui-content">
+			<div class="fieldPage">
+				<br /> 
+				<span class="fieldTitle">Word to rhyme with:</span>
+				<input
+					data-clear-btn="true" name="rhymeTI" id="rhymeTI" value=""
+					type="text">
+
+			</div>
+		</div>
+		<!-- /content -->
+
+	</div>
+	<!-- /page -->
+
+	<div data-role="page" id="syllables" data-title="Home"
+		class="syllablesPage">
+
+		<div data-role="main" class="ui-content">
+			<div class="fieldPage">
+
+				<br /> 
+				<span class="fieldTitle">Number of syllables:</span>
+				<input name="syllablesTI" id="syllablesTI" value="" type="number">
+			</div>
+		</div>
+		<!-- /content -->
+
+	</div>
+	<!-- /page -->
+
+	<div data-role="page" id="scansion" data-title="rhyme"
+		class="scansionPage">
+
+		<div data-role="main" class="ui-content">
+			<div class="fieldPage">
+
+				<br /> 
+				<span class="fieldTitle">Ending stress pattern:</span>
+				<div class="scansionSyllables">
+					<div class="scansionGrid1">					
+						<div class="scansionAdd">+</div>
+					</div>
+					<div class="scansionGrid2">				
+						<div class="scansionSymbolS">/</div>
+						<div class="scansionTxtBoxS">Stressed</div>
+					</div>
+					<div class="scansionGrid2">				
+						<div class="scansionSymbol">*</div>
+						<div class="scansionTxtBox">Unstressed</div>
+					</div>
+					<div class="scansionGrid2">				
+						<div class="scansionSymbol">*</div>
+						<div class="scansionTxtBox">Unstressed</div>
+					</div>
+					<div class="scansionGrid2">				
+						<div class="scansionSymbolS">/</div>
+						<div class="scansionTxtBoxS">Stressed</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /content -->
+
+	</div>
+	<!-- /page -->
+
+	<div data-role="page" id="meaning" data-title="rhyme"
+		class="meaningPage">
+
+		<div data-role="main" class="ui-content">
+			<div class="fieldPage">
+
+				<br /> 
+				<span class="fieldTitle">Synonymous with:</span>
+				<input name="meaningTI" id="meaningTI" value="" type="text">
+			</div>
+		</div>
+		<!-- /content -->
+
+	</div>
+	<!-- /page -->
+
+	<div data-role="footer" data-position="fixed" data-theme="b">
+
+		<div data-role="navbar" data-iconpos="left">
+			<ul>
+				<li><a href="#" data-icon="search"><span class="searchBar">Search</span></a></li>
+			</ul>
+		</div>
+	</div>
+
+</body>
+</html>
