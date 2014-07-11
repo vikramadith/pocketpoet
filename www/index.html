@@ -14,6 +14,7 @@
 	{
 		$("[data-role='navbar']").navbar();
 		$("[data-role='header'], [data-role='footer']").toolbar();
+		$("#nav1").hide();
 	});
 
 	$(document).on("pagecontainershow", function() 
@@ -23,8 +24,20 @@
 
 	function onNav(location) 
 	{
-		//$.mobile.navigate(location);
-		$.mobile.changePage(location, {transition: "slidedown"});
+		console.log("onNav");
+		
+		if(location == "#home")
+		{
+			$.mobile.changePage(location, {transition: "slideup"});	
+			$("#nav1").hide();
+			$("#nav2").show();			
+		}
+		else
+		{
+			$.mobile.changePage(location, {transition: "slidedown"});	
+			$("#nav2").hide();
+			$("#nav1").show();
+		}
 	}
 
 	function ScaleContentToDevice() 
@@ -37,19 +50,6 @@
 		
 	}
 	
-// 	function flip()
-// 	{
-// 		//alert("boo");
-// 		$("#a123").flip(
-// 		{
-// 			direction: "lr",
-// 			color: "white",
-// 			speed: 200,
-// 			content: "<div id='a124' class='scansionGrid3' onclick='flip();'><div class='scansionSymbol'>*</div><div class='scansionTxtBox'>Unstressed</div></div>",
-// 		})
-// 	}
-
-
 	var scansion = "";
 
 	function scansionControlClick(event)
@@ -75,14 +75,19 @@
 		$("#scansionTxt").html(scansion);
 	}
 	
+	function doneClick()
+	{
+		onNav("#home");
+	}
+	
 </script>
 
 </head>
 
 <body>
 
-	<div data-role="header" data-position="fixed" data-theme="a">
-		<h1>Pocket Poet</h1>
+	<div data-role="header" data-position="fixed" data-theme="a" class="headz" data-tap-toggle="false">
+		<div class="headzTxt">Pocket Poet</div>
 		<div data-role="navbar">
 			<ul>
 				<li>
@@ -106,7 +111,9 @@
 
 	<div data-role="page" id="home" data-title="Home" class="homePage">
 
-		<div data-role="main" class="ui-content"></div>
+		<div data-role="main" class="ui-content">
+			&nbsp;
+		</div>
 		<!-- /content -->
 
 	</div>
@@ -142,6 +149,7 @@
 		</div>
 		<!-- /content -->
 
+
 	</div>
 	<!-- /page -->
 
@@ -171,6 +179,7 @@
 		</div>
 		<!-- /content -->
 
+
 	</div>
 	<!-- /page -->
 
@@ -187,17 +196,35 @@
 		</div>
 		<!-- /content -->
 
+
 	</div>
 	<!-- /page -->
 
-	<div data-role="footer" data-position="fixed" data-theme="b">
+	<div data-role="footer" data-position="fixed" data-theme="b" data-tap-toggle="false">
 
-		<div data-role="navbar" data-iconpos="left">
+<!-- 		<div data-role="navbar" data-iconpos="left"> -->
+<!-- 			<ul id="fieldNav"> -->
+<!-- 				<li><a href="#" data-icon="delete"><span class="navBtn">Clear</span></a></li> -->
+<!-- 				<li><a href="#" data-icon="check" onclick="doneClick()"><span class="navBtn">Done</span></a></li> -->
+<!-- 			</ul> -->
+<!-- 			<ul id="mainNav"> -->
+<!-- 				<li><a href="#" data-icon="search" onclick="doneClick()"><span class="navBtn">Search</span></a></li> -->
+<!-- 			</ul> -->
+<!-- 		</div> -->
+
+		<div id="nav1" data-role="navbar" data-iconpos="left">
 			<ul>
-				<li><a href="#" data-icon="search"><span class="searchBar">Search</span></a></li>
-				<li><a href="#" data-icon="search"><span class="searchBar">Search</span></a></li>
+				<li><a href="#" data-icon="delete"><span class="navBtn">Clear</span></a></li>
+				<li><a href="#" data-icon="check" onclick="doneClick()"><span class="navBtn">Done</span></a></li>
 			</ul>
 		</div>
+		
+		<div id="nav2" data-role="navbar" data-iconpos="left">
+			<ul>
+				<li><a href="#" data-icon="search"><span class="navBtn">Search</span></a></li>
+			</ul>
+		</div>
+		
 	</div>
 
 </body>

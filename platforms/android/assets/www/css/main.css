@@ -66,15 +66,17 @@ body {
     }
 }
 
-/* h1 { */
-/*     font-size:24px; */
-/*     margin:0px; */
-/*     overflow:visible; */
-/*     padding:0px; */
-/*     text-align:center; */
-/* } */
+h1 
+{
+    font-size:24px;
+    margin:0px;
+    overflow:visible;
+    padding:0px;
+    text-align:center;
+}
 
-.event {
+.event 
+{
     border-radius:4px;
     -webkit-border-radius:4px;
     color:#FFFFFF;
@@ -160,7 +162,22 @@ body {
 /*     padding:0px; */
 /* } */
 
-.searchBar {
+.headz
+{
+    margin:0px;
+    overflow:visible;
+    padding-top:10px;
+    text-align:center;
+}
+
+.headzTxt
+{	
+    font-size:24px;
+    margin-bottom: 10px;
+}
+
+.navBtn
+{
     font-size:24px;
     margin:0px;
     overflow:visible;
@@ -168,8 +185,14 @@ body {
     text-align:center;
 }
 
+#mainNav
+{
+	visibility: hidden;
+}
+
 .homePage
 {
+	background: #FFFFFF;
 }
 
 .fieldPage
@@ -186,7 +209,6 @@ body {
 .rhymePage
 {
 	background: #F8CB4A;
-	border: solid 3px red;
 }
 
 .syllablesPage
@@ -204,10 +226,23 @@ body {
 	background: #9DDECC;
 }
 
-.scansionSyllables
+.scansionControls
 {
 	margin: 0px auto;
-	width: 350px;	
+	width: 142px;	
+}
+
+.scansionText
+{
+	font-size: 24pt;
+	color: #EEEEEE;
+	letter-spacing: 4px;
+}
+
+.scansionTextS
+{
+	color: #808080;
+	font-weight: bold;
 }
 
 .scansionAdd
@@ -267,12 +302,23 @@ body {
 .scansionGrid1
 {
 	float: left;
+	border-style: solid;
+	border-width: 3px;
+	border-color: rgba(255, 255, 255, 0);
 }
 
 .scansionGrid2
 {
 	float: left;
 	margin-left: 10px;
+	border-style: solid;
+	border-width: 3px;
+	border-color: rgba(255, 255, 255, 0);
+}
+
+.scansionGrid3
+{
+	float: left;
 }
 
 .ui-header

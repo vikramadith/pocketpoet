@@ -66,15 +66,17 @@ body {
     }
 }
 
-/* h1 { */
-/*     font-size:24px; */
-/*     margin:0px; */
-/*     overflow:visible; */
-/*     padding:0px; */
-/*     text-align:center; */
-/* } */
+h1 
+{
+    font-size:24px;
+    margin:0px;
+    overflow:visible;
+    padding:0px;
+    text-align:center;
+}
 
-.event {
+.event 
+{
     border-radius:4px;
     -webkit-border-radius:4px;
     color:#FFFFFF;
@@ -160,7 +162,22 @@ body {
 /*     padding:0px; */
 /* } */
 
-.searchBar {
+.headz
+{
+    margin:0px;
+    overflow:visible;
+    padding-top:10px;
+    text-align:center;
+}
+
+.headzTxt
+{	
+    font-size:24px;
+    margin-bottom: 10px;
+}
+
+.navBtn
+{
     font-size:24px;
     margin:0px;
     overflow:visible;
@@ -168,8 +185,14 @@ body {
     text-align:center;
 }
 
+#mainNav
+{
+	visibility: hidden;
+}
+
 .homePage
 {
+	background: #FFFFFF;
 }
 
 .fieldPage
@@ -186,7 +209,6 @@ body {
 .rhymePage
 {
 	background: #F8CB4A;
-	border: solid 3px red;
 }
 
 .syllablesPage

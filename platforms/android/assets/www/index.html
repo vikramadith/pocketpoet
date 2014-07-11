@@ -10,21 +10,38 @@
 <script src="js/jquery-1.11.1.min.js"></script>
 <script src="js/jquery.mobile.custom.min.js"></script>
 <script>
-	$(function() {
+	$(function() 
+	{
 		$("[data-role='navbar']").navbar();
 		$("[data-role='header'], [data-role='footer']").toolbar();
+		$("#nav1").hide();
 	});
 
-	$(document).on("pagecontainershow", function() {
+	$(document).on("pagecontainershow", function() 
+	{
 		ScaleContentToDevice();
 	});
 
-	function onNav(location) {
-		//$.mobile.navigate(location);
-		$.mobile.changePage(location, {transition: "slidedown"});
+	function onNav(location) 
+	{
+		console.log("onNav");
+		
+		if(location == "#home")
+		{
+			$.mobile.changePage(location, {transition: "slideup"});	
+			$("#nav1").hide();
+			$("#nav2").show();			
+		}
+		else
+		{
+			$.mobile.changePage(location, {transition: "slidedown"});	
+			$("#nav2").hide();
+			$("#nav1").show();
+		}
 	}
 
-	function ScaleContentToDevice() {
+	function ScaleContentToDevice() 
+	{
 		scroll(0, 0);
 		var content = $.mobile.getScreenHeight()
 				- $(".ui-header").outerHeight() - $(".ui-footer").outerHeight()
@@ -32,14 +49,45 @@
 		$(".ui-content").height(content);
 		
 	}
+	
+	var scansion = "";
+
+	function scansionControlClick(event)
+	{
+		var scansionCtrl = $(event.target).parent()[0].id;
+		
+		$("#" + scansionCtrl).css("border-color", "#3388CC");
+		
+		setTimeout(function()
+				{
+					$("#" + scansionCtrl).css("border-color", "rgba(255, 255, 255, 0)");					
+				}, 200);
+		
+		if(scansionCtrl == "scansionAddUnstressed")
+		{
+			scansion += "*";
+		}
+		else
+		{
+			scansion += "<span class='scansionTextS'>/</span>";
+		}
+		
+		$("#scansionTxt").html(scansion);
+	}
+	
+	function doneClick()
+	{
+		onNav("#home");
+	}
+	
 </script>
 
 </head>
 
 <body>
 
-	<div data-role="header" data-position="fixed" data-theme="a">
-		<h1>Pocket Poet</h1>
+	<div data-role="header" data-position="fixed" data-theme="a" class="headz" data-tap-toggle="false">
+		<div class="headzTxt">Pocket Poet</div>
 		<div data-role="navbar">
 			<ul>
 				<li>
@@ -63,7 +111,9 @@
 
 	<div data-role="page" id="home" data-title="Home" class="homePage">
 
-		<div data-role="main" class="ui-content"></div>
+		<div data-role="main" class="ui-content">
+			&nbsp;
+		</div>
 		<!-- /content -->
 
 	</div>
@@ -99,6 +149,7 @@
 		</div>
 		<!-- /content -->
 
+
 	</div>
 	<!-- /page -->
 
@@ -110,23 +161,16 @@
 
 				<br /> 
 				<span class="fieldTitle">Ending stress pattern:</span>
-				<div class="scansionSyllables">
-					<div class="scansionGrid1">					
-						<div class="scansionAdd">+</div>
-					</div>
-					<div class="scansionGrid2">				
-						<div class="scansionSymbolS">/</div>
-						<div class="scansionTxtBoxS">Stressed</div>
-					</div>
-					<div class="scansionGrid2">				
+				<br/>
+				<div id="scansionTxt" class="scansionText">--</div>
+				<br/><br/>
+				Tap below to add stressed or unstressed syllables
+				<div class="scansionControls">
+					<div id="scansionAddUnstressed" class="scansionGrid1" onclick="scansionControlClick(event);">					
 						<div class="scansionSymbol">*</div>
 						<div class="scansionTxtBox">Unstressed</div>
 					</div>
-					<div class="scansionGrid2">				
-						<div class="scansionSymbol">*</div>
-						<div class="scansionTxtBox">Unstressed</div>
-					</div>
-					<div class="scansionGrid2">				
+					<div id="scansionAddStressed" class="scansionGrid2" onclick="scansionControlClick(event);">	
 						<div class="scansionSymbolS">/</div>
 						<div class="scansionTxtBoxS">Stressed</div>
 					</div>
@@ -134,6 +178,7 @@
 			</div>
 		</div>
 		<!-- /content -->
+
 
 	</div>
 	<!-- /page -->
@@ -151,16 +196,35 @@
 		</div>
 		<!-- /content -->
 
+
 	</div>
 	<!-- /page -->
 
-	<div data-role="footer" data-position="fixed" data-theme="b">
+	<div data-role="footer" data-position="fixed" data-theme="b" data-tap-toggle="false">
 
-		<div data-role="navbar" data-iconpos="left">
+<!-- 		<div data-role="navbar" data-iconpos="left"> -->
+<!-- 			<ul id="fieldNav"> -->
+<!-- 				<li><a href="#" data-icon="delete"><span class="navBtn">Clear</span></a></li> -->
+<!-- 				<li><a href="#" data-icon="check" onclick="doneClick()"><span class="navBtn">Done</span></a></li> -->
+<!-- 			</ul> -->
+<!-- 			<ul id="mainNav"> -->
+<!-- 				<li><a href="#" data-icon="search" onclick="doneClick()"><span class="navBtn">Search</span></a></li> -->
+<!-- 			</ul> -->
+<!-- 		</div> -->
+
+		<div id="nav1" data-role="navbar" data-iconpos="left">
 			<ul>
-				<li><a href="#" data-icon="search"><span class="searchBar">Search</span></a></li>
+				<li><a href="#" data-icon="delete"><span class="navBtn">Clear</span></a></li>
+				<li><a href="#" data-icon="check" onclick="doneClick()"><span class="navBtn">Done</span></a></li>
 			</ul>
 		</div>
+		
+		<div id="nav2" data-role="navbar" data-iconpos="left">
+			<ul>
+				<li><a href="#" data-icon="search"><span class="navBtn">Search</span></a></li>
+			</ul>
+		</div>
+		
 	</div>
 
 </body>
