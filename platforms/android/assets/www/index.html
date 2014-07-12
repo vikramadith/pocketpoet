@@ -14,7 +14,7 @@
 	{
 		$("[data-role='navbar']").navbar();
 		$("[data-role='header'], [data-role='footer']").toolbar();
-		$("#nav1").hide();
+		//$("#nav1").hide();
 	});
 
 	$(document).on("pagecontainershow", function() 
@@ -80,6 +80,35 @@
 		onNav("#home");
 	}
 	
+	function searchClick()
+	{
+		$.ajax(
+			{
+				url: "http://rhymebrain.com/talk?function=getRhymes&word=set"
+			})
+			.done(rhymeResults);
+	}
+	
+	function rhymeResults(data)
+	{
+		var listHtml = "";
+		
+		for(var dataIndex = 0; dataIndex < data.length; dataIndex++)
+		{
+			if(data[dataIndex].score != "300")
+			{
+				continue;
+			}
+			
+			listHtml += "<li>" + data[dataIndex].word + "</li>";
+		}
+		
+		alert(listHtml);
+		
+		$("#wordList").html(listHtml);
+		$("#wordList").listview("refresh");
+	}
+	
 </script>
 
 </head>
@@ -94,16 +123,16 @@
 					<div class="filterBox filterBoxRhyme" onclick="onNav('#rhyme');">Rhyme</div>
 				</li>
 				<li>
+					<div class="filterBox filterBoxMeaning"
+						onclick="onNav('#meaning');">Meaning</div>
+				</li>
+				<li>
 					<div class="filterBox filterBoxSyllables"
 						onclick="onNav('#syllables');">Syllables</div>
 				</li>
 				<li>
 					<div class="filterBox filterBoxScansion"
 						onclick="onNav('#scansion');">Scansion</div>
-				</li>
-				<li>
-					<div class="filterBox filterBoxMeaning"
-						onclick="onNav('#meaning');">Meaning</div>
 				</li>
 			</ul>
 		</div>
@@ -112,7 +141,12 @@
 	<div data-role="page" id="home" data-title="Home" class="homePage">
 
 		<div data-role="main" class="ui-content">
-			&nbsp;
+			<div class="fieldPage">
+				<ul id="wordList" data-role="listview">
+					<li>boo</li>
+					<li>dfgdfg</li>
+				</ul>
+			</div>
 		</div>
 		<!-- /content -->
 
@@ -132,6 +166,25 @@
 			</div>
 		</div>
 		<!-- /content -->
+
+	</div>
+	<!-- /page -->
+	
+	
+
+	<div data-role="page" id="meaning" data-title="rhyme"
+		class="meaningPage">
+
+		<div data-role="main" class="ui-content">
+			<div class="fieldPage">
+
+				<br /> 
+				<span class="fieldTitle">Synonymous with:</span>
+				<input name="meaningTI" id="meaningTI" value="" type="text">
+			</div>
+		</div>
+		<!-- /content -->
+
 
 	</div>
 	<!-- /page -->
@@ -183,23 +236,6 @@
 	</div>
 	<!-- /page -->
 
-	<div data-role="page" id="meaning" data-title="rhyme"
-		class="meaningPage">
-
-		<div data-role="main" class="ui-content">
-			<div class="fieldPage">
-
-				<br /> 
-				<span class="fieldTitle">Synonymous with:</span>
-				<input name="meaningTI" id="meaningTI" value="" type="text">
-			</div>
-		</div>
-		<!-- /content -->
-
-
-	</div>
-	<!-- /page -->
-
 	<div data-role="footer" data-position="fixed" data-theme="b" data-tap-toggle="false">
 
 <!-- 		<div data-role="navbar" data-iconpos="left"> -->
@@ -212,16 +248,16 @@
 <!-- 			</ul> -->
 <!-- 		</div> -->
 
-		<div id="nav1" data-role="navbar" data-iconpos="left">
-			<ul>
-				<li><a href="#" data-icon="delete"><span class="navBtn">Clear</span></a></li>
-				<li><a href="#" data-icon="check" onclick="doneClick()"><span class="navBtn">Done</span></a></li>
-			</ul>
-		</div>
+<!-- 		<div id="nav1" data-role="navbar" data-iconpos="left"> -->
+<!-- 			<ul> -->
+<!-- 				<li><a href="#" data-icon="delete"><span class="navBtn">Clear</span></a></li> -->
+<!-- 				<li><a href="#" data-icon="check" onclick="doneClick()"><span class="navBtn">Done</span></a></li> -->
+<!-- 			</ul> -->
+<!-- 		</div> -->
 		
 		<div id="nav2" data-role="navbar" data-iconpos="left">
 			<ul>
-				<li><a href="#" data-icon="search"><span class="navBtn">Search</span></a></li>
+				<li><a href="#" data-icon="search" onclick="searchClick();"><span class="navBtn">Search</span></a></li>
 			</ul>
 		</div>
 		
