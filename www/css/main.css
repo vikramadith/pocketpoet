@@ -24,17 +24,7 @@ body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#E4E4E4;
-    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
-    background-image:-webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        color-stop(0, #A7A7A7),
-        color-stop(0.51, #E4E4E4)
-    );
+    background-color:#FFFFFF;
     background-attachment:fixed;
     height:100%;
     margin:0px;
@@ -71,7 +61,6 @@ body {
     background:             #333333;
     font-weight: bold;
     color:                     #fff;
-    text-shadow: 0 -1px 1px #000;
     background-image: -webkit-gradient(linear, left top, left bottom, from( #555), to( #333));
     background-image: -webkit-linear-gradient(#555, #333);
     background-image:    -moz-linear-gradient(#555, #333);
@@ -131,11 +120,19 @@ h1
 .filterBox
 {
 	text-align: center;
-	background: green;
 	color: white;
 	padding-top: 10px;
-	padding-bottom: 10px;
+	padding-bottom: 5px;
 	margin: 0px;
+	text-shadow: none;	
+}
+
+.filterSub
+{
+	font-size: 8pt;
+	color: #404040; 
+	padding-bottom: 5px;
+	text-shadow: none;	
 }
 
 .filterBoxRhyme
@@ -182,12 +179,17 @@ h1
     overflow:visible;
     padding-top:10px;
     text-align:center;
+    background: white;
+    -webkit-box-shadow: 0px 5px 5px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    0px 5px 5px 0px rgba(50, 50, 50, 0.75);
+	box-shadow:         0px 5px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .headzTxt
 {	
     font-size:24px;
     margin-bottom: 10px;
+    color: #404040;
 }
 
 .navBtn
@@ -238,6 +240,30 @@ h1
 .meaningPage
 {
 	background: #9DDECC;
+}
+
+.rhymeLowLbl
+{
+	float: left;
+	margin-left: 15px;
+	font-size: 8pt;
+}
+
+.rhymeHighLbl
+{
+	float: right;
+	margin-right: 15px;
+	font-size: 8pt;
+}
+
+.rhymeSlider input
+{
+	display: none;
+}
+
+.rhymeSlider .ui-slider-track 
+{    
+	margin-left: 15px;
 }
 
 .scansionControls

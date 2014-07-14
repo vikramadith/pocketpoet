@@ -26,6 +26,53 @@
 
 	function onNav(location) 
 	{
+		switch(currentPage)
+		{
+			case "#rhyme":
+				if(isSearchingRhyme())
+				{
+					$("#rhymeSub").html(truncate($("#rhymeTI").val()));
+				}
+				else
+				{
+					clearRhyme();
+				}
+				break;
+
+			case "#meaning":
+				if(isSearchingMeaning())
+				{
+					$("#meaningSub").html(truncate($("#meaningTI").val()));
+				}
+				else
+				{
+					clearMeaning();
+				}
+				break;
+
+			case "#syllables":
+				if(isSearchingSyllables())
+				{
+					$("#syllablesSub").html(truncate($("#syllablesTI").val()));
+				}
+				else
+				{
+					clearSyllables();
+				}
+				break;
+
+			case "#scansion":
+				if(isSearchingScansion())
+				{
+					$("#scansionSub").html(truncate($("#scansionTxt").text()));
+				}
+				else
+				{
+					clearScansion();
+				}
+				break;
+		}
+		
 		if(location == "#home")
 		{
 			$.mobile.changePage(location, {transition: "slideup"});	
@@ -52,56 +99,106 @@
 		
 	}
 	
+	function truncate(str)
+	{
+		var newStr = str;
+		if(str.length >= 9)
+		{
+			newStr = str.substring(0, 9) + "…";
+		}
+		
+		return newStr
+	}
+	
 	function clearClick()
 	{
 		switch(currentPage)
 		{
 			case "#rhyme":
-				$("#rhymeTI").val("");
+				clearRhyme();
 				break;
 
 			case "#meaning":
-				$("#meaningTI").val("");
+				clearMeaning();
 				break;
 
 			case "#syllables":
-				$("#syllablesTI").val("");
+				clearSyllables();
 				break;
 
 			case "#scansion":
-				scansion = "";
-				$("#scansionTxt").text("--");
+				clearScansion();
 				break;
 		}
 	}
 	
 	function clearAllClick()
 	{
-		$("#rhymeTI").val("");
-		$("#meaningTI").val("");
-		$("#syllablesTI").val("");
-		scansion = "";
-		$("#scansionTxt").text("--");
-		
+
+		try
+		{
+			clearRhyme();
+		}
+		catch (e)
+		{
+
+		}
+		try
+		{
+			clearMeaning();
+		}
+		catch (e)
+		{
+
+		}
+		try
+		{
+			clearSyllables();
+		}
+		catch (e)
+		{
+
+		}
+		try
+		{
+			clearScansion();
+		}
+		catch (e)
+		{
+
+		}
+
 		words = [];
-		
+
 		displayWords();
+
+		//$("#txt").animate({"font-size": 50, opacity: 0}, 2000, function(){});
+
+		// 		 $( "#txt" ).animate({
+		// 			 opacity: 0.25,
+		// 			 font-size: "50",
+		// 			 height: "toggle"
+		// 			 }, 5000, function() {
+		// 			 // Animation complete.
+		// 			 });
 	}
-	
+
 	var scansion = "";
 
 	function scansionControlClick(event)
 	{
 		var scansionCtrl = $(event.target).parent()[0].id;
-		
+
 		$("#" + scansionCtrl).css("border-color", "#3388CC");
-		
-		setTimeout(function()
+
+		setTimeout(
+				function()
 				{
-					$("#" + scansionCtrl).css("border-color", "rgba(255, 255, 255, 0)");					
+					$("#" + scansionCtrl).css("border-color",
+							"rgba(255, 255, 255, 0)");
 				}, 200);
-		
-		if(scansionCtrl == "scansionAddUnstressed")
+
+		if (scansionCtrl == "scansionAddUnstressed")
 		{
 			scansion += "*";
 		}
@@ -109,28 +206,65 @@
 		{
 			scansion += "<span class='scansionTextS'>/</span>";
 		}
-		
+
 		$("#scansionTxt").html(scansion);
 	}
-	
+
 	function doneClick()
 	{
 		onNav("#home");
-	}	
+	}
 
-	var isSearchingRhyme = false;
-	var isSearchingMeaning = false;
-	var isSearchingSyllables = false;
-	var isSearchingScansion = false;
 	var words = [];
-	
+
 	function searchClick()
 	{
+		var $this = $( this ),
+        theme = $this.jqmData( "theme" ) || $.mobile.loader.prototype.options.theme,
+        msgText = $this.jqmData( "msgtext" ) || $.mobile.loader.prototype.options.text,
+        textVisible = $this.jqmData( "textvisible" ) || $.mobile.loader.prototype.options.textVisible,
+        textonly = !!$this.jqmData( "textonly" );
+        html = $this.jqmData( "html" ) || "";
+    $.mobile.loading( "show", {
+            text: msgText,
+            textVisible: textVisible,
+            theme: theme,
+            textonly: textonly,
+            html: html
+    });
+// 		var loadScreen = document.createElement('div');
+// 		loadScreen.id = "loadScreen";
+// 		loadScreen.style.position = "absolute";
+// 		loadScreen.style.width = "100%";
+// 		loadScreen.style.height = "100%";
+
+// 		var mainPage = document.getElementById("mainPage");
+// 		mainPage.appendChild(loadScreen);
+
+// 		console
+// 				.log($("#loadScreen").width() + ", "
+// 						+ $("#loadScreen").height());
+
+// 		var w = ($("#loadScreen").width() / 2) - 50;
+// 		var h = $("#loadScreen").height() / 4;
+
+// 		var txt = document.createElement('div');
+// 		txt.id = "txt";
+// 		txt.innerHTML = "Loading…";
+// 		txt.style.position = "absolute";
+// 		txt.style.display = 'block';
+// 		txt.style.textAlign = 'center';
+// 		txt.style.width = '100px';
+// 		txt.style.color = '#A0A0A0';
+// 		txt.style.left = w + "px";
+// 		txt.style.top = h + "px";
+
+// 		var loadScreen = document.getElementById("loadScreen");
+// 		loadScreen.appendChild(txt);
+
 		words = [];
-		
-		checkFields();
-		
-		if(isSearchingRhyme)
+
+		if (isSearchingRhyme())
 		{
 			fetchRhymes();
 		}
@@ -139,74 +273,126 @@
 			fetchRhymesComplete();
 		}
 	}
-	
-	function checkFields()
+
+	function isSearchingRhyme()
 	{
-		isSearchingRhyme = false;
-		isSearchingMeaning = false;
-		isSearchingSyllables = false;
-		isSearchingScansion = false;
-		
-		if($("#rhymeTI").val().length > 0)
-		{
-			isSearchingRhyme = true;
-		}
-		if($("#meaningTI").val().length > 0)
-		{
-			isSearchingMeaning = true;
-		}
-		if($("#syllablesTI").val().length > 0)
-		{
-			isSearchingSyllables = true;
-		}
-		if($("#scansionTxt").text() != "--")
-		{
-			isSearchingScansion = true;
-		}
+		return $("#rhymeTI").val().length > 0;
 	}
-	
+
+	function isSearchingMeaning()
+	{
+		return $("#meaningTI").val().length > 0;
+	}
+
+	function isSearchingSyllables()
+	{
+		return $("#syllablesTI").val().length > 0;
+	}
+
+	function isSearchingScansion()
+	{
+		return $("#scansionTxt").text() != "--";
+	}
+
+	function clearRhyme()
+	{
+		$("#rhymeTI").val("");
+		$("#rhymeSub").text("--");
+		$("#rhymeStrengthSlider").val(75).slider("refresh");
+	}
+
+	function clearMeaning()
+	{
+		$("#meaningTI").val("");
+		$("#meaningSub").text("--");
+	}
+
+	function clearSyllables()
+	{
+		$("#syllablesTI").val("");
+		$("#syllablesSub").text("--");
+	}
+
+	function clearScansion()
+	{
+		console.log("Clear");
+		scansion = "";
+		$("#scansionTxt").text("--");
+		$("#scansionSub").text("--");
+	}
+
 	function fetchRhymes()
 	{
-		console.log("http://rhymebrain.com/talk?function=getRhymes&word=" + $("#rhymeTI").val());
-		
+		console.log("http://rhymebrain.com/talk?function=getRhymes&word="
+				+ $("#rhymeTI").val());
+
 		$.ajax(
 				{
-					url: "http://rhymebrain.com/talk?function=getRhymes&word=" + $("#rhymeTI").val()
-				})
-				.done(fetchRhymesHandler);
+					url : "http://rhymebrain.com/talk?function=getRhymes&word="
+							+ $("#rhymeTI").val()
+				}).done(fetchRhymesHandler);
 	}
-	
+
 	function fetchRhymesHandler(data)
 	{
 		console.log(data);
-		
-		for(var dataIndex = 0; dataIndex < data.length; dataIndex++)
+
+		for ( var dataIndex = 0; dataIndex < data.length; dataIndex++)
 		{
-			console.log("Rhyme score: " + data[dataIndex].score);
-			if(data[dataIndex].score < 200)
+			console.log("Rhyme score: " + data[dataIndex].score + " of "
+					+ getRhymeStrength());
+			if (data[dataIndex].score < getRhymeStrength())
 			{
 				console.log("Nope rhyme score: " + data[dataIndex].score)
 				continue;
 			}
-			if(isSearchingSyllables)
+			if (isSearchingSyllables())
 			{
-				if(data[dataIndex].syllables != $("#syllablesTI").val())
+				if (data[dataIndex].syllables != $("#syllablesTI").val())
 				{
 					continue;
 				}
 			}
-			
+
 			console.log("Rhyme push: " + data[dataIndex].word);
-			
+
 			words.push(data[dataIndex].word);
 		}
-		
+
 		fetchRhymesComplete();
 	}
-	
+
+	function getRhymeStrength()
+	{
+		var strength = 300;
+
+		console.log("Strength slider: " + $("#rhymeStrengthSlider").val());
+
+		switch ($("#rhymeStrengthSlider").val())
+		{
+			case "25":
+				strength = 150;
+				break;
+
+			case "50":
+				strength = 200;
+				break;
+
+			case "75":
+				strength = 250;
+				break;
+
+			case "100":
+				strength = 300;
+				break;
+		}
+
+		return strength;
+	}
+
 	function fetchRhymesComplete()
 	{
-		if(isSearchingMeaning)
+		if (isSearchingMeaning())
 		{
 			fetchSynonyms();
 		}
@@ -215,85 +401,93 @@
 			fetchSynonymsComplete();
 		}
 	}
-	
+
 	function fetchSynonyms()
 	{
-		console.log("http://www.stands4.com/services/v2/syno.php?uid=3460&tokenid=kJ2gkdLBvKBR7Qww&word=" + $("#meaningTI").val());
-		
-		$.ajax(
-				{
-					url: "http://www.stands4.com/services/v2/syno.php?uid=3460&tokenid=kJ2gkdLBvKBR7Qww&word=" + $("#meaningTI").val()
-				})
-				.done(fetchSynonymsHandler);
+		console
+				.log("http://www.stands4.com/services/v2/syno.php?uid=3460&tokenid=kJ2gkdLBvKBR7Qww&word="
+						+ $("#meaningTI").val());
+
+		$
+				.ajax(
+						{
+							url : "http://www.stands4.com/services/v2/syno.php?uid=3460&tokenid=kJ2gkdLBvKBR7Qww&word="
+									+ $("#meaningTI").val()
+						}).done(fetchSynonymsHandler);
 	}
-	
+
 	function fetchSynonymsHandler(xml)
 	{
 		console.log(xml);
-		
+
 		var synonyms = [];
-		
-		$(xml).find("result").each(function()
-			{
-				var synonymsNodeTxt = $(this).find("synonyms").text();
-				
-				var itemArray = synonymsNodeTxt.split(", ");
-				
-				for(var itemIndex = 0; itemIndex < itemArray.length; itemIndex++)
-				{
-					var item = itemArray[itemIndex];
-					
-					var isItemInList = false;
-					for(var synonymsIndex = 0; synonymsIndex < synonyms.length; synonymsIndex++)
-					{
-						if(item == synonyms[synonymsIndex])
+
+		$(xml)
+				.find("result")
+				.each(
+						function()
 						{
-							isItemInList = true;
-							break;
-						}
-					}
-					
-					if(!isItemInList)
-					{
-						console.log("Syn init push: " + item);
-						synonyms.push(item);
-					}
-				}
-			});
-		
-		if(!isSearchingRhyme)
+							var synonymsNodeTxt = $(this).find("synonyms")
+									.text();
+
+							var itemArray = synonymsNodeTxt.split(", ");
+
+							for ( var itemIndex = 0; itemIndex < itemArray.length; itemIndex++)
+							{
+								var item = itemArray[itemIndex];
+
+								var isItemInList = false;
+								for ( var synonymsIndex = 0; synonymsIndex < synonyms.length; synonymsIndex++)
+								{
+									if (item == synonyms[synonymsIndex])
+									{
+										isItemInList = true;
+										break;
+									}
+								}
+
+								if (!isItemInList)
+								{
+									console.log("Syn init push: " + item);
+									synonyms.push(item);
+								}
+							}
+						});
+
+		if (!isSearchingRhyme())
 		{
 			words = synonyms;
 		}
 		else
 		{
 			var matchingWords = [];
-			
-			for(var synonymsIndex = 0; synonymsIndex < synonyms.length; synonymsIndex++)
+
+			for ( var synonymsIndex = 0; synonymsIndex < synonyms.length; synonymsIndex++)
 			{
 				var synonym = synonyms[synonymsIndex];
-												
-				for(var wordIndex = 0; wordIndex < words.length; wordIndex++)
+
+				for ( var wordIndex = 0; wordIndex < words.length; wordIndex++)
 				{
-					if(synonym == words[wordIndex])
+					if (synonym == words[wordIndex])
 					{
 						console.log("Syn match push: " + synonym);
-						
+
 						matchingWords.push(synonym);
 						break;
 					}
 				}
 			}
-			
+
 			words = matchingWords;
-		}	
-		
+		}
+
 		fetchSynonymsComplete();
 	}
-	
+
 	function fetchSynonymsComplete()
 	{
-		if(isSearchingScansion || (isSearchingSyllables && !isSearchingRhyme))
+		if (isSearchingScansion()
+				|| (isSearchingSyllables && !isSearchingRhyme()))
 		{
 			checkWordDetails();
 		}
@@ -302,124 +496,128 @@
 			displayWords();
 		}
 	}
-	
+
 	var matchingWordsDetail = [];
 	var wordDetailIndex = 0;
-	
+
 	function checkWordDetails()
 	{
 		matchingWordsDetail = [];
 		wordDetailIndex = 0;
-		
+
 		fetchWordDetails();
 	}
-	
+
 	function fetchWordDetails()
 	{
-		console.log(wordDetailIndex + "http://rhymebrain.com/talk?function=getWordInfo&word=" + words[wordDetailIndex])
-		
-		$.getJSON("http://rhymebrain.com/talk?function=getWordInfo&word=" + words[wordDetailIndex], fetchDetailsHandler);
+		console.log(wordDetailIndex
+				+ "http://rhymebrain.com/talk?function=getWordInfo&word="
+				+ words[wordDetailIndex])
+
+		$.getJSON("http://rhymebrain.com/talk?function=getWordInfo&word="
+				+ words[wordDetailIndex], fetchDetailsHandler);
 	}
-	
+
 	function fetchDetailsHandler(data)
 	{
 		var isMatching = true;
-		
-		if(isSearchingSyllables && !isSearchingRhyme)
+
+		if (isSearchingSyllables() && !isSearchingRhyme())
 		{
-			if(data.syllables !=  $("#syllablesTI").val())
+			if (data.syllables != $("#syllablesTI").val())
 			{
 				console.log("Nope Syll: " + data.word);
 				isMatching = false;
 			}
 		}
-		
-		if(isSearchingScansion)
+
+		if (isSearchingScansion())
 		{
-			if(data.word.indexOf(" ") >= 0)
+			if (data.word.indexOf(" ") >= 0)
 			{
 				console.log("Nope Scan Space: " + data.word);
 				isMatching = false;
 			}
 			else
 			{
-				if(!isScansionMatching(data.pron))
+				if (!isScansionMatching(data.pron))
 				{
 					console.log("Nope Scan: " + data.word);
-					isMatching = false;				
+					isMatching = false;
 				}
 			}
 		}
-		
-		if(isMatching)
+
+		if (isMatching)
 		{
 			console.log("Push matching detail: " + words[wordDetailIndex]);
 			matchingWordsDetail.push(words[wordDetailIndex]);
 		}
-		
-		if(++wordDetailIndex == words.length)
+
+		if (++wordDetailIndex == words.length)
 		{
 			checkWordDetailsComplete();
 		}
 		else
 		{
-			fetchWordDetails();				
+			fetchWordDetails();
 		}
 	}
-	
+
 	function testClick()
 	{
 		var t1 = "Boo";
 		var t2 = "Boo oo";
-		
-		if(t1.indexOf(" ") >= 0)
+
+		if (t1.indexOf(" ") >= 0)
 		{
 			console.log("Nope1");
 		}
-		if(t2.indexOf(" ") >= 0)
+		if (t2.indexOf(" ") >= 0)
 		{
 			console.log("Nope3");
 		}
 	}
-	
+
 	function isScansionMatching(pron)
 	{
 		//var pron = "HH AH0 L OW1";
-		
+
 		var pronScansion = "";
-		
-		for(var charIndex = 0; charIndex < pron.length; charIndex++)
+
+		for ( var charIndex = 0; charIndex < pron.length; charIndex++)
 		{
-			switch(pron[charIndex])
+			switch (pron[charIndex])
 			{
 				case "0":
 				case "2":
 					pronScansion += "*";
 					break;
-					
+
 				case "1":
 					pronScansion += "/";
 					break;
 			}
 		}
-		
+
 		console.log(pron + ": " + pronScansion);
-		
+
 		var pronFieldScansion = $("#scansionTxt").text();
-		
-		if(pronScansion.length < pronFieldScansion.length)
+
+		if (pronScansion.length < pronFieldScansion.length)
 		{
 			console.log("Pron: false shorter");
 			return false;
 		}
-		
+
 		pronScansionReverse = pronScansion.split("").reverse().join("");
-		pronFieldScansionReverse = pronFieldScansion.split("").reverse().join("");
-		
+		pronFieldScansionReverse = pronFieldScansion.split("").reverse().join(
+				"");
+
 		var isMatching = true;
-		for(var charIndex = 0; charIndex < pronFieldScansionReverse.length; charIndex++)
+		for ( var charIndex = 0; charIndex < pronFieldScansionReverse.length; charIndex++)
 		{
-			if(pronFieldScansionReverse[charIndex] != pronScansionReverse[charIndex])
+			if (pronFieldScansionReverse[charIndex] != pronScansionReverse[charIndex])
 			{
 				isMatching = false;
 				break;
@@ -429,33 +627,34 @@
 		console.log("Pron: " + isMatching);
 		return isMatching;
 	}
-	
+
 	function checkWordDetailsComplete()
 	{
 		console.log(matchingWordsDetail);
-		
+
 		words = matchingWordsDetail;
-		
+
 		console.log(words);
-		
+
 		displayWords();
 	}
-	
+
 	function displayWords()
 	{
+		$.mobile.loading( "hide" );
 		console.log("Display words");
+
 		
 		var listHTML = "";
-		
-		for(var wordIndex = 0; wordIndex < words.length; wordIndex++)
+
+		for ( var wordIndex = 0; wordIndex < words.length; wordIndex++)
 		{
 			listHTML += "<li>" + words[wordIndex] + "</li>";
-		}		
+		}
 
 		$("#wordList").html(listHTML);
 		$("#wordList").listview("refresh");
 	}
-	
 </script>
 
 </head>
@@ -469,18 +668,22 @@
 			<ul>
 				<li>
 					<div class="filterBox filterBoxRhyme" onclick="onNav('#rhyme');">Rhyme</div>
+					<div id="rhymeSub" class="filterSub filterBoxRhyme" onclick="onNav('#rhyme');">--</div>
 				</li>
 				<li>
 					<div class="filterBox filterBoxMeaning"
 						onclick="onNav('#meaning');">Meaning</div>
+					<div id="meaningSub" class="filterSub filterBoxMeaning" onclick="onNav('#meaning');">--</div>
 				</li>
 				<li>
 					<div class="filterBox filterBoxSyllables"
 						onclick="onNav('#syllables');">Syllables</div>
+					<div id="syllablesSub" class="filterSub filterBoxSyllables" onclick="onNav('#syllables');">--</div>
 				</li>
 				<li>
 					<div class="filterBox filterBoxScansion"
 						onclick="onNav('#scansion');">Scansion</div>
+					<div id="scansionSub" class="filterSub filterBoxScansion" onclick="onNav('#scansion');">--</div>
 				</li>
 			</ul>
 		</div>
@@ -488,7 +691,7 @@
 
 	<div data-role="page" id="home" data-title="Home" class="homePage">
 
-		<div data-role="main" class="ui-content">
+		<div id="mainPage" data-role="main" class="ui-content">
 			<div class="fieldPage">
 				<ul id="wordList" data-role="listview">
 				</ul>
@@ -506,6 +709,21 @@
 				<br /> <span class="fieldTitle">Word to rhyme with:</span> <input
 					data-clear-btn="true" name="rhymeTI" id="rhymeTI" value=""
 					type="text">
+					
+				<br/>
+				<br/>
+				
+				Strength of rhyme:
+				
+				
+				<br/>
+				
+				<div class="rhymeSlider">
+					<input id="rhymeStrengthSlider" type="range" name="slider-1" id="slider-1" data-highlight="true" value="75" min="25" max="100" step="25">
+				</div>				
+				
+				<div class="rhymeLowLbl">Lowest</div>
+				<div class="rhymeHighLbl">Highest</div>
 
 			</div>
 		</div>
