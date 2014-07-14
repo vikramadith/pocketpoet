@@ -250,6 +250,7 @@ D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\css\images\icons-sv
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\css\images\icons-svg\video-white.svg \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\img\logo.png \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\js\index.js \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\js\jquery-1.11.1.js \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\js\jquery-1.11.1.min.js \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\js\jquery.mobile.custom.min.js \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\ant-build\AndroidManifest.xml \

@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" href="css/jquery.mobile-1.4.3.css" />
 <link rel="stylesheet" href="css/main.css" />
-<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/jquery-1.11.1.js"></script>
 <script src="js/jquery.mobile.custom.min.js"></script>
 <script>
 	$(function() 
@@ -21,11 +21,11 @@
 	{
 		ScaleContentToDevice();
 	});
+	
+	var currentPage = "#home";
 
 	function onNav(location) 
 	{
-		console.log("onNav");
-		
 		if(location == "#home")
 		{
 			$.mobile.changePage(location, {transition: "slideup"});	
@@ -38,6 +38,8 @@
 			$("#nav2").hide();
 			$("#nav1").show();
 		}
+		
+		currentPage = location;
 	}
 
 	function ScaleContentToDevice() 
@@ -48,6 +50,42 @@
 				- $(".ui-content").outerHeight() + $(".ui-content").height();
 		$(".ui-content").height(content);
 		
+	}
+	
+	function clearClick()
+	{
+		switch(currentPage)
+		{
+			case "#rhyme":
+				$("#rhymeTI").val("");
+				break;
+
+			case "#meaning":
+				$("#meaningTI").val("");
+				break;
+
+			case "#syllables":
+				$("#syllablesTI").val("");
+				break;
+
+			case "#scansion":
+				scansion = "";
+				$("#scansionTxt").text("--");
+				break;
+		}
+	}
+	
+	function clearAllClick()
+	{
+		$("#rhymeTI").val("");
+		$("#meaningTI").val("");
+		$("#syllablesTI").val("");
+		scansion = "";
+		$("#scansionTxt").text("--");
+		
+		words = [];
+		
+		displayWords();
 	}
 	
 	var scansion = "";
@@ -96,34 +134,41 @@
 		{
 			fetchRhymes();
 		}
-		
-		
-		
+		else
+		{
+			fetchRhymesComplete();
+		}
 	}
 	
 	function checkFields()
 	{
+		isSearchingRhyme = false;
+		isSearchingMeaning = false;
+		isSearchingSyllables = false;
+		isSearchingScansion = false;
+		
 		if($("#rhymeTI").val().length > 0)
 		{
-			console.log("1");
 			isSearchingRhyme = true;
 		}
 		if($("#meaningTI").val().length > 0)
-		{console.log("2");
+		{
 			isSearchingMeaning = true;
 		}
 		if($("#syllablesTI").val().length > 0)
-		{console.log("3");
+		{
 			isSearchingSyllables = true;
 		}
 		if($("#scansionTxt").text() != "--")
-		{console.log("4");
+		{
 			isSearchingScansion = true;
 		}
 	}
 	
 	function fetchRhymes()
 	{
+		console.log("http://rhymebrain.com/talk?function=getRhymes&word=" + $("#rhymeTI").val());
+		
 		$.ajax(
 				{
 					url: "http://rhymebrain.com/talk?function=getRhymes&word=" + $("#rhymeTI").val()
@@ -133,10 +178,14 @@
 	
 	function fetchRhymesHandler(data)
 	{
+		console.log(data);
+		
 		for(var dataIndex = 0; dataIndex < data.length; dataIndex++)
 		{
-			if(data[dataIndex].score != "300")
+			console.log("Rhyme score: " + data[dataIndex].score);
+			if(data[dataIndex].score < 200)
 			{
+				console.log("Nope rhyme score: " + data[dataIndex].score)
 				continue;
 			}
 			if(isSearchingSyllables)
@@ -147,14 +196,255 @@
 				}
 			}
 			
+			console.log("Rhyme push: " + data[dataIndex].word);
+			
 			words.push(data[dataIndex].word);
 		}
+		
+		fetchRhymesComplete();
+	}
+	
+	function fetchRhymesComplete()
+	{
+		if(isSearchingMeaning)
+		{
+			fetchSynonyms();
+		}
+		else
+		{
+			fetchSynonymsComplete();
+		}
+	}
+	
+	function fetchSynonyms()
+	{
+		console.log("http://www.stands4.com/services/v2/syno.php?uid=3460&tokenid=kJ2gkdLBvKBR7Qww&word=" + $("#meaningTI").val());
+		
+		$.ajax(
+				{
+					url: "http://www.stands4.com/services/v2/syno.php?uid=3460&tokenid=kJ2gkdLBvKBR7Qww&word=" + $("#meaningTI").val()
+				})
+				.done(fetchSynonymsHandler);
+	}
+	
+	function fetchSynonymsHandler(xml)
+	{
+		console.log(xml);
+		
+		var synonyms = [];
+		
+		$(xml).find("result").each(function()
+			{
+				var synonymsNodeTxt = $(this).find("synonyms").text();
+				
+				var itemArray = synonymsNodeTxt.split(", ");
+				
+				for(var itemIndex = 0; itemIndex < itemArray.length; itemIndex++)
+				{
+					var item = itemArray[itemIndex];
+					
+					var isItemInList = false;
+					for(var synonymsIndex = 0; synonymsIndex < synonyms.length; synonymsIndex++)
+					{
+						if(item == synonyms[synonymsIndex])
+						{
+							isItemInList = true;
+							break;
+						}
+					}
+					
+					if(!isItemInList)
+					{
+						console.log("Syn init push: " + item);
+						synonyms.push(item);
+					}
+				}
+			});
+		
+		if(!isSearchingRhyme)
+		{
+			words = synonyms;
+		}
+		else
+		{
+			var matchingWords = [];
+			
+			for(var synonymsIndex = 0; synonymsIndex < synonyms.length; synonymsIndex++)
+			{
+				var synonym = synonyms[synonymsIndex];
+												
+				for(var wordIndex = 0; wordIndex < words.length; wordIndex++)
+				{
+					if(synonym == words[wordIndex])
+					{
+						console.log("Syn match push: " + synonym);
+						
+						matchingWords.push(synonym);
+						break;
+					}
+				}
+			}
+			
+			words = matchingWords;
+		}	
+		
+		fetchSynonymsComplete();
+	}
+	
+	function fetchSynonymsComplete()
+	{
+		if(isSearchingScansion || (isSearchingSyllables && !isSearchingRhyme))
+		{
+			checkWordDetails();
+		}
+		else
+		{
+			displayWords();
+		}
+	}
+	
+	var matchingWordsDetail = [];
+	var wordDetailIndex = 0;
+	
+	function checkWordDetails()
+	{
+		matchingWordsDetail = [];
+		wordDetailIndex = 0;
+		
+		fetchWordDetails();
+	}
+	
+	function fetchWordDetails()
+	{
+		console.log(wordDetailIndex + "http://rhymebrain.com/talk?function=getWordInfo&word=" + words[wordDetailIndex])
+		
+		$.getJSON("http://rhymebrain.com/talk?function=getWordInfo&word=" + words[wordDetailIndex], fetchDetailsHandler);
+	}
+	
+	function fetchDetailsHandler(data)
+	{
+		var isMatching = true;
+		
+		if(isSearchingSyllables && !isSearchingRhyme)
+		{
+			if(data.syllables !=  $("#syllablesTI").val())
+			{
+				console.log("Nope Syll: " + data.word);
+				isMatching = false;
+			}
+		}
+		
+		if(isSearchingScansion)
+		{
+			if(data.word.indexOf(" ") >= 0)
+			{
+				console.log("Nope Scan Space: " + data.word);
+				isMatching = false;
+			}
+			else
+			{
+				if(!isScansionMatching(data.pron))
+				{
+					console.log("Nope Scan: " + data.word);
+					isMatching = false;				
+				}
+			}
+		}
+		
+		if(isMatching)
+		{
+			console.log("Push matching detail: " + words[wordDetailIndex]);
+			matchingWordsDetail.push(words[wordDetailIndex]);
+		}
+		
+		if(++wordDetailIndex == words.length)
+		{
+			checkWordDetailsComplete();
+		}
+		else
+		{
+			fetchWordDetails();				
+		}
+	}
+	
+	function testClick()
+	{
+		var t1 = "Boo";
+		var t2 = "Boo oo";
+		
+		if(t1.indexOf(" ") >= 0)
+		{
+			console.log("Nope1");
+		}
+		if(t2.indexOf(" ") >= 0)
+		{
+			console.log("Nope3");
+		}
+	}
+	
+	function isScansionMatching(pron)
+	{
+		//var pron = "HH AH0 L OW1";
+		
+		var pronScansion = "";
+		
+		for(var charIndex = 0; charIndex < pron.length; charIndex++)
+		{
+			switch(pron[charIndex])
+			{
+				case "0":
+				case "2":
+					pronScansion += "*";
+					break;
+					
+				case "1":
+					pronScansion += "/";
+					break;
+			}
+		}
+		
+		console.log(pron + ": " + pronScansion);
+		
+		var pronFieldScansion = $("#scansionTxt").text();
+		
+		if(pronScansion.length < pronFieldScansion.length)
+		{
+			console.log("Pron: false shorter");
+			return false;
+		}
+		
+		pronScansionReverse = pronScansion.split("").reverse().join("");
+		pronFieldScansionReverse = pronFieldScansion.split("").reverse().join("");
+		
+		var isMatching = true;
+		for(var charIndex = 0; charIndex < pronFieldScansionReverse.length; charIndex++)
+		{
+			if(pronFieldScansionReverse[charIndex] != pronScansionReverse[charIndex])
+			{
+				isMatching = false;
+				break;
+			}
+		}
+
+		console.log("Pron: " + isMatching);
+		return isMatching;
+	}
+	
+	function checkWordDetailsComplete()
+	{
+		console.log(matchingWordsDetail);
+		
+		words = matchingWordsDetail;
+		
+		console.log(words);
 		
 		displayWords();
 	}
 	
 	function displayWords()
 	{
+		console.log("Display words");
+		
 		var listHTML = "";
 		
 		for(var wordIndex = 0; wordIndex < words.length; wordIndex++)
@@ -303,7 +593,7 @@
 
 		<div id="nav1" data-role="navbar" data-iconpos="left">
 			<ul>
-				<li><a href="#" data-icon="delete"><span class="navBtn">Clear</span></a></li>
+				<li><a href="#" data-icon="delete" onclick="clearClick();"><span class="navBtn">Clear</span></a></li>
 				<li><a href="#" data-icon="check" onclick="doneClick()"><span
 						class="navBtn">Done</span></a></li>
 			</ul>
@@ -311,6 +601,8 @@
 
 		<div id="nav2" data-role="navbar" data-iconpos="left">
 			<ul>
+				<li><a href="#" data-icon="delete" onclick="clearAllClick();"><span
+						class="navBtn">Clear All</span></a></li>
 				<li><a href="#" data-icon="search" onclick="searchClick();"><span
 						class="navBtn">Search</span></a></li>
 			</ul>
