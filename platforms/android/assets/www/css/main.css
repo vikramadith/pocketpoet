@@ -30,6 +30,7 @@ body {
     margin:0px;
     padding:0px;
     width:100%;
+    letter-spacing: 3px;
 }
 
 /* Portrait layout (default) */
@@ -124,7 +125,8 @@ h1
 	padding-top: 10px;
 	padding-bottom: 5px;
 	margin: 0px;
-	text-shadow: none;	
+	text-shadow: none;
+	letter-spacing: 0px;
 }
 
 .filterSub
@@ -133,6 +135,7 @@ h1
 	color: #404040; 
 	padding-bottom: 5px;
 	text-shadow: none;	
+	letter-spacing: 1px;
 }
 
 .filterBoxRhyme
@@ -161,6 +164,7 @@ h1
 	text-shadow: none;
 	box-shadow: none;
 	-webkit-box-shadow: none;
+	color: white;
 }
 
 /* .searchBar */
@@ -172,6 +176,12 @@ h1
 /*     overflow:visible; */
 /*     padding:0px; */
 /* } */
+
+
+.infoBtn
+{
+	right: 15px;
+}
 
 .headz
 {
@@ -211,15 +221,69 @@ h1
 	background: #FFFFFF;
 }
 
+.tips
+{
+	margin-top: 50px;
+	margin-left: 30px;
+	margin-right: 30px;
+	color: #C0C0C0;
+}
+
+#resultsBox
+{
+	display: none;
+}
+
+.resultsFoot
+{
+	color: #A0A0A0;
+	margin-top: 30px;
+}
+
+#tipBlank
+{
+	display: block;
+}
+
+#tipSearch
+{
+	display: none;
+}
+
 .fieldPage
 {
 	padding: 10px;
 	text-align: center;
 }
 
+.infoPage
+{
+	padding-top: 30px;
+	color: #A0A0A0;
+	text-align: center;
+}
+
+.infoTxtBox
+{	
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.infoRB
+{
+	color: #265D9F;
+	font-size: 16pt;
+	font-weight: bold;
+}
+
 .fieldTitle
 {
-	font-size: 24pt;
+	font-size: 22pt;
+}
+
+.fieldTxt
+{
+	font-weight: bold;
 }
 
 .rhymePage
@@ -247,6 +311,7 @@ h1
 	float: left;
 	margin-left: 15px;
 	font-size: 8pt;
+	font-weight: bold;
 }
 
 .rhymeHighLbl
@@ -254,6 +319,7 @@ h1
 	float: right;
 	margin-right: 15px;
 	font-size: 8pt;
+	font-weight: bold;
 }
 
 .rhymeSlider input
@@ -270,6 +336,7 @@ h1
 {
 	margin: 0px auto;
 	width: 142px;	
+	letter-spacing: 0px;
 }
 
 .scansionText

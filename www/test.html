@@ -1,0 +1,40 @@
+<html>
+
+<head>
+
+<script>
+var str = "alpha, baseline, birth, commencement, dawn, day one, genesis, get-go (<it>also</it> git-go), inception, incipience, incipiency, kickoff, launch, morning, nascence, nascency, onset, outset, start, threshold";
+
+var synonyms = [];
+
+var itemArray = str.split(", ");
+
+for ( var itemIndex = 0; itemIndex < itemArray.length; itemIndex++)
+{
+	var item = itemArray[itemIndex];
+
+	console.log(item);
+	item = item.split(" (")[0];
+	item = item.split(" [")[0];
+
+	var isItemInList = false;
+	for ( var synonymsIndex = 0; synonymsIndex < synonyms.length; synonymsIndex++)
+	{
+		if (item == synonyms[synonymsIndex])
+		{
+			isItemInList = true;
+			break;
+		}
+	}
+
+	if (!isItemInList)
+	{
+		console.log("Syn init push: " + item);
+		synonyms.push(item);
+	}
+}
+alert(str);
+</script>
+</head>
+
+</html>

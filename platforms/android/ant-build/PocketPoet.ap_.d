@@ -35,6 +35,7 @@ D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\css \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\img \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\index.html \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\js \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\test.html \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\css\images \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\css\jquery.mobile-1.4.3.css \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\css\jquery.mobile-1.4.3.min.css \
@@ -248,7 +249,10 @@ D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\css\images\icons-sv
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\css\images\icons-svg\user-white.svg \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\css\images\icons-svg\video-black.svg \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\css\images\icons-svg\video-white.svg \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\img\down.png \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\img\logo.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\img\mw.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\img\up.png \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\js\index.js \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\js\jquery-1.11.1.js \
 D:\Studio\PocketPoet\pocketpoet\platforms\android\assets\www\js\jquery-1.11.1.min.js \

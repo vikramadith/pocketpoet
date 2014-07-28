@@ -73,17 +73,44 @@
 				break;
 		}
 		
-		if(location == "#home")
+		if(location == "#info")
 		{
-			$.mobile.changePage(location, {transition: "slideup"});	
+			$.mobile.changePage(location);	
 			$("#nav1").hide();
-			$("#nav2").show();			
+			$("#nav2").hide();
+			$("#infoBtn").hide();
+
+			$("#navTabs").css("display", "none");
 		}
 		else
 		{
-			$.mobile.changePage(location, {transition: "slidedown"});	
-			$("#nav2").hide();
-			$("#nav1").show();
+			$("#navTabs").css("display", "block");
+			$("#infoBtn").show();
+			
+			if(location == "#home")
+			{
+				$.mobile.changePage(location, {transition: "slideup"});	
+				$("#nav1").hide();
+				$("#nav2").show();
+				
+				if(!words || words.length == 0)
+				{
+					if(isSearchingRhyme() || isSearchingMeaning() || isSearchingSyllables() || isSearchingScansion())
+					{
+						displayTipSearch();
+					}
+					else
+					{
+						displayTipBlank()();
+					}
+				}
+			}
+			else
+			{
+				$.mobile.changePage(location, {transition: "slidedown"});	
+				$("#nav2").hide();
+				$("#nav1").show();
+			}
 		}
 		
 		currentPage = location;
@@ -107,7 +134,7 @@
 			newStr = str.substring(0, 9) + "…";
 		}
 		
-		return newStr
+		return newStr;
 	}
 	
 	function clearClick()
@@ -170,7 +197,7 @@
 
 		words = [];
 
-		displayWords();
+		displayTipBlank();
 
 		//$("#txt").animate({"font-size": 50, opacity: 0}, 2000, function(){});
 
@@ -219,6 +246,11 @@
 
 	function searchClick()
 	{
+		if(!(isSearchingRhyme() || isSearchingMeaning()))
+		{
+			return;
+		}
+		
 		var $this = $( this ),
         theme = $this.jqmData( "theme" ) || $.mobile.loader.prototype.options.theme,
         msgText = $this.jqmData( "msgtext" ) || $.mobile.loader.prototype.options.text,
@@ -404,57 +436,110 @@
 
 	function fetchSynonyms()
 	{
+// 		console
+// 				.log("http://www.stands4.com/services/v2/syno.php?uid=3460&tokenid=kJ2gkdLBvKBR7Qww&word="
+// 						+ $("#meaningTI").val());
+
+// 		$
+// 				.ajax(
+// 						{
+// 							url : "http://www.stands4.com/services/v2/syno.php?uid=3460&tokenid=kJ2gkdLBvKBR7Qww&word="
+// 									+ $("#meaningTI").val()
+// 						}).done(fetchSynonymsHandler);
+		
 		console
-				.log("http://www.stands4.com/services/v2/syno.php?uid=3460&tokenid=kJ2gkdLBvKBR7Qww&word="
-						+ $("#meaningTI").val());
+		.log("http://www.dictionaryapi.com/api/v1/references/thesaurus/xml/" + $("#meaningTI").val() + "?key=d4cc1fe2-8b4a-4a82-be3b-ccacbcd20b8f");
 
 		$
-				.ajax(
-						{
-							url : "http://www.stands4.com/services/v2/syno.php?uid=3460&tokenid=kJ2gkdLBvKBR7Qww&word="
-									+ $("#meaningTI").val()
-						}).done(fetchSynonymsHandler);
+		.ajax(
+				{
+					url : "http://www.dictionaryapi.com/api/v1/references/thesaurus/xml/" + $("#meaningTI").val() + "?key=d4cc1fe2-8b4a-4a82-be3b-ccacbcd20b8f",
+				    headers: { 'Access-Control-Allow-Origin': '*' },
+				    crossDomain: "true"
+				}).done(fetchSynonymsHandler);
 	}
 
 	function fetchSynonymsHandler(xml)
-	{
-		console.log(xml);
-
+	{	
 		var synonyms = [];
-
+		
 		$(xml)
-				.find("result")
+		.find("entry")
+		.each(
+			function()
+			{
+				$(this)
+				.find("sens")
 				.each(
-						function()
+					function()
+					{
+						var synonymsNodeTxt = $(this).find("syn")
+								.text();
+						
+						var itemArray = synonymsNodeTxt.split(", ");
+	
+						for ( var itemIndex = 0; itemIndex < itemArray.length; itemIndex++)
 						{
-							var synonymsNodeTxt = $(this).find("synonyms")
-									.text();
-
-							var itemArray = synonymsNodeTxt.split(", ");
-
-							for ( var itemIndex = 0; itemIndex < itemArray.length; itemIndex++)
+							var item = itemArray[itemIndex];
+							
+							item = item.split(" (")[0];
+							item = item.split(" [")[0];
+	
+							var isItemInList = false;
+							for ( var synonymsIndex = 0; synonymsIndex < synonyms.length; synonymsIndex++)
 							{
-								var item = itemArray[itemIndex];
-
-								var isItemInList = false;
-								for ( var synonymsIndex = 0; synonymsIndex < synonyms.length; synonymsIndex++)
+								if (item == synonyms[synonymsIndex])
 								{
-									if (item == synonyms[synonymsIndex])
-									{
-										isItemInList = true;
-										break;
-									}
-								}
-
-								if (!isItemInList)
-								{
-									console.log("Syn init push: " + item);
-									synonyms.push(item);
+									isItemInList = true;
+									break;
 								}
 							}
-						});
+	
+							if (!isItemInList)
+							{
+								console.log("Syn init push: " + item);
+								synonyms.push(item);
+							}
+						}
+					})
+			});
+		
 
-		if (!isSearchingRhyme())
+// 		var synonyms = [];
+
+// 		$(xml)
+// 				.find("result")
+// 				.each(
+// 						function()
+// 						{
+// 							var synonymsNodeTxt = $(this).find("synonyms")
+// 									.text();
+
+// 							var itemArray = synonymsNodeTxt.split(", ");
+
+// 							for ( var itemIndex = 0; itemIndex < itemArray.length; itemIndex++)
+// 							{
+// 								var item = itemArray[itemIndex];
+
+// 								var isItemInList = false;
+// 								for ( var synonymsIndex = 0; synonymsIndex < synonyms.length; synonymsIndex++)
+// 								{
+// 									if (item == synonyms[synonymsIndex])
+// 									{
+// 										isItemInList = true;
+// 										break;
+// 									}
+// 								}
+
+// 								if (!isItemInList)
+// 								{
+// 									console.log("Syn init push: " + item);
+// 									synonyms.push(item);
+// 								}
+// 							}
+// 						});
+
+		if (isSearchingRhyme() == false)
 		{
 			words = synonyms;
 		}
@@ -487,7 +572,7 @@
 	function fetchSynonymsComplete()
 	{
 		if (isSearchingScansion()
-				|| (isSearchingSyllables && !isSearchingRhyme()))
+				|| (isSearchingSyllables() && !isSearchingRhyme()))
 		{
 			checkWordDetails();
 		}
@@ -638,6 +723,20 @@
 
 		displayWords();
 	}
+	
+	function displayTipBlank()
+	{
+		$("#resultsBox").css("display", "none");
+		$("#tipBlank").css("display", "block");
+		$("#tipSearch").css("display", "none");
+	}
+	
+	function displayTipSearch()
+	{
+		$("#resultsBox").css("display", "none");
+		$("#tipBlank").css("display", "none");
+		$("#tipSearch").css("display", "block");		
+	}
 
 	function displayWords()
 	{
@@ -651,6 +750,11 @@
 		{
 			listHTML += "<li>" + words[wordIndex] + "</li>";
 		}
+		
+
+		$("#tipBlank").css("display", "none");
+		$("#tipSearch").css("display", "none");
+		$("#resultsBox").css("display", "block");
 
 		$("#wordList").html(listHTML);
 		$("#wordList").listview("refresh");
@@ -664,7 +768,8 @@
 	<div data-role="header" data-position="fixed" data-theme="a"
 		class="headz" data-tap-toggle="false">
 		<div class="headzTxt">Pocket Poet</div>
-		<div data-role="navbar">
+		<a id="infoBtn" href="#" class="ui-btn ui-btn-right ui-icon-info ui-btn-icon-notext ui-corner-all ui-btn-b" onclick="onNav('#info')">No text</a>
+		<div id="navTabs" data-role="navbar">
 			<ul>
 				<li>
 					<div class="filterBox filterBoxRhyme" onclick="onNav('#rhyme');">Rhyme</div>
@@ -672,7 +777,7 @@
 				</li>
 				<li>
 					<div class="filterBox filterBoxMeaning"
-						onclick="onNav('#meaning');">Meaning</div>
+						onclick="onNav('#meaning');">Synonyms</div>
 					<div id="meaningSub" class="filterSub filterBoxMeaning" onclick="onNav('#meaning');">--</div>
 				</li>
 				<li>
@@ -693,8 +798,41 @@
 
 		<div id="mainPage" data-role="main" class="ui-content">
 			<div class="fieldPage">
-				<ul id="wordList" data-role="listview">
-				</ul>
+				<div id="resultsBox">
+					<ul id="wordList" data-role="listview">
+					</ul>
+					
+					<br/>
+					
+					<div class="resultsFoot">
+						<strong>Results powered by</strong>
+						<br/><br/>
+						<a href="http://rhymebrain.com" rel="external">RhymeBrain.com</a>
+						<br/>
+						<a href="http://www.dictionaryapi.com/products/api-collegiate-thesaurus.htm" rel="external">Merriam-Webster's Collegiate® Thesaurus</a>
+					</div>
+					
+				</div>
+				
+				<div id="tipBlank" class="tips">
+					<img src="img/up.png"/>
+					<br/>
+					Tap on a field to add criteria for search
+				</div>
+				
+				<div id="tipSearch" class="tips">
+					<img src="img/up.png"/>
+					<br/>
+					Tap on a field to add criteria for search
+					
+					<br/>
+					<br/>
+					<br/>
+					
+					Tap on 'Search' to find matching words
+					<br/>					
+					<img src="img/down.png"/>
+				</div>
 			</div>
 		</div>
 		<!-- /content -->
@@ -706,14 +844,14 @@
 
 		<div data-role="main" class="ui-content">
 			<div class="fieldPage">
-				<br /> <span class="fieldTitle">Word to rhyme with:</span> <input
+				<br /> <span class="fieldTitle">Rhymes with:</span> <input
 					data-clear-btn="true" name="rhymeTI" id="rhymeTI" value=""
 					type="text">
 					
 				<br/>
 				<br/>
 				
-				Strength of rhyme:
+				<span class="fieldTxt">Strength of rhyme:</span>
 				
 				
 				<br/>
@@ -772,10 +910,10 @@
 		<div data-role="main" class="ui-content">
 			<div class="fieldPage">
 
-				<br /> <span class="fieldTitle">Ending stress pattern:</span> <br />
+				<br /> <span class="fieldTitle">Ending stress:</span> <br />
 				<div id="scansionTxt" class="scansionText">--</div>
 				<br />
-				<br /> Tap below to add stressed or unstressed syllables
+				<br /> <span class="fieldTxt">Tap below to add stressed or unstressed syllables</span>
 				<div class="scansionControls">
 					<div id="scansionAddUnstressed" class="scansionGrid1"
 						onclick="scansionControlClick(event);">
@@ -796,6 +934,33 @@
 	</div>
 	<!-- /page -->
 
+	<div data-role="page" id="info" data-title="info"
+		class="infoPage">
+
+		<div data-role="main" class="ui-content">
+			<div class="infoPage">
+
+				<div class="infoTxtBox">Pocket Poet is a poet's best friend helping you find words matching your verse.</div>
+				
+				<br/><br/><br/>
+				
+				<strong>POWERED BY</strong>
+				<br/><br/>
+				<span class="infoRB">RhymeBrain.com</span>
+				<br/><br/>
+				<img src="img/mw.png"/>
+				
+				<br/><br/><br/><br/>
+				
+				<a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" onclick="onNav('#home')">OK!</a>
+			</div>
+		</div>
+		<!-- /content -->
+
+
+	</div>
+	<!-- /page -->
+	
 	<div data-role="footer" data-position="fixed" data-theme="b"
 		data-tap-toggle="false">
 
