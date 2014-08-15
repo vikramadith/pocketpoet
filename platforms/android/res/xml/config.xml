@@ -15,4 +15,5 @@
     <content src="index.html" />
     <access origin="*" />
     <icon src="res/logo.png" />
+    <preference name="Orientation" value="portrait" />
 </widget>

@@ -216,6 +216,18 @@ h1
 	visibility: hidden;
 }
 
+.alertDlg
+{
+	color: #808080;
+	border: solid 1px #808080;
+	width: "80%";
+	max-width: 300px;
+	margin: 0px auto;
+	margin-top: 50px;
+	padding: 10px;
+	text-align: center;
+}
+
 .homePage
 {
 	background: #FFFFFF;

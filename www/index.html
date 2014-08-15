@@ -15,106 +15,15 @@
 		$("[data-role='navbar']").navbar();
 		$("[data-role='header'], [data-role='footer']").toolbar();
 		$("#nav1").hide();
+		$("#nav2").hide();
+		$("#searchPop").hide();
 	});
 
 	$(document).on("pagecontainershow", function() 
-	{
-		ScaleContentToDevice();
-	});
-	
-	var currentPage = "#home";
-
-	function onNav(location) 
-	{
-		switch(currentPage)
 		{
-			case "#rhyme":
-				if(isSearchingRhyme())
-				{
-					$("#rhymeSub").html(truncate($("#rhymeTI").val()));
-				}
-				else
-				{
-					clearRhyme();
-				}
-				break;
-
-			case "#meaning":
-				if(isSearchingMeaning())
-				{
-					$("#meaningSub").html(truncate($("#meaningTI").val()));
-				}
-				else
-				{
-					clearMeaning();
-				}
-				break;
-
-			case "#syllables":
-				if(isSearchingSyllables())
-				{
-					$("#syllablesSub").html(truncate($("#syllablesTI").val()));
-				}
-				else
-				{
-					clearSyllables();
-				}
-				break;
-
-			case "#scansion":
-				if(isSearchingScansion())
-				{
-					$("#scansionSub").html(truncate($("#scansionTxt").text()));
-				}
-				else
-				{
-					clearScansion();
-				}
-				break;
-		}
-		
-		if(location == "#info")
-		{
-			$.mobile.changePage(location);	
-			$("#nav1").hide();
-			$("#nav2").hide();
-			$("#infoBtn").hide();
-
-			$("#navTabs").css("display", "none");
-		}
-		else
-		{
-			$("#navTabs").css("display", "block");
-			$("#infoBtn").show();
+			ScaleContentToDevice();
 			
-			if(location == "#home")
-			{
-				$.mobile.changePage(location, {transition: "slideup"});	
-				$("#nav1").hide();
-				$("#nav2").show();
-				
-				if(!words || words.length == 0)
-				{
-					if(isSearchingRhyme() || isSearchingMeaning() || isSearchingSyllables() || isSearchingScansion())
-					{
-						displayTipSearch();
-					}
-					else
-					{
-						displayTipBlank()();
-					}
-				}
-			}
-			else
-			{
-				$.mobile.changePage(location, {transition: "slidedown"});	
-				$("#nav2").hide();
-				$("#nav1").show();
-			}
-		}
-		
-		currentPage = location;
-	}
+		});
 
 	function ScaleContentToDevice() 
 	{
@@ -123,6 +32,161 @@
 				- $(".ui-header").outerHeight() - $(".ui-footer").outerHeight()
 				- $(".ui-content").outerHeight() + $(".ui-content").height();
 		$(".ui-content").height(content);
+		
+	}
+	
+	var initDone = false;
+	
+	$(document).on("pageinit", function()
+		{
+			if(initDone)
+			{
+				return;
+			}
+			else
+			{
+				initDone = true;
+			}
+			
+			var pages = ["home", "rhyme", "meaning", "syllables", "scansion", "info"];
+			
+			for(var pageIndex = 0; pageIndex < pages.length; pageIndex++)
+			{
+				$("#" + pages[pageIndex]).bind("pageshow", pageChange);
+			}
+		})
+	
+	
+	var currentPage = "#home";
+		
+	function pageChange(event, data)
+	{
+		try
+		{
+			switch(currentPage)
+			{
+				case "#rhyme":
+					if(isSearchingRhyme())
+					{
+						$("#rhymeSub").html(truncate($("#rhymeTI").val()));
+					}
+					else
+					{
+						clearRhyme();
+					}
+					break;
+
+				case "#meaning":
+					if(isSearchingMeaning())
+					{
+						$("#meaningSub").html(truncate($("#meaningTI").val()));
+					}
+					else
+					{
+						clearMeaning();
+					}
+					break;
+
+				case "#syllables":
+					if(isSearchingSyllables())
+					{
+						$("#syllablesSub").html(truncate($("#syllablesTI").val()));
+					}
+					else
+					{
+						clearSyllables();
+					}
+					break;
+
+				case "#scansion":
+					if(isSearchingScansion())
+					{
+						$("#scansionSub").html(truncate($("#scansionTxt").text()));
+					}
+					else
+					{
+						clearScansion();
+					}
+					break;
+			}
+			
+			console.log("pageshow: " + data.prevPage[0].id + " to " + data.toPage[0].id);
+
+			var location = data.toPage[0].id;
+			
+			if(location == "info")
+			{
+				$("#nav1").hide();
+				$("#nav2").hide();
+				$("#infoBtn").hide();
+				$("#navTabs").css("display", "none");
+			}
+			else
+			{
+				$("#navTabs").css("display", "block");
+				$("#infoBtn").show();
+				
+				if(location == "home")
+				{
+					$("#nav1").hide();
+					
+					var isSearchingSomething = (isSearchingRhyme() || isSearchingMeaning() || isSearchingSyllables() || isSearchingScansion());
+					
+					if(isSearchingSomething)
+					{	
+						$("#nav2").show();
+					}
+					else
+					{
+						$("#nav2").hide();
+					}
+					
+					if(!words || words.length == 0)
+					{
+						if(isSearchingSomething)
+						{
+							displayTipSearch();
+						}
+						else
+						{
+							displayTipBlank()();
+						}
+					}
+				}
+				else
+				{	
+					$("#nav2").hide();
+					$("#nav1").show();
+				}
+			}
+			
+
+			currentPage = "#" + location;
+		}
+		catch(e)
+		{
+			
+		}
+	}	
+
+	function onNav(location) 
+	{
+		if(location == "#info")
+		{
+			$.mobile.changePage(location);
+
+		}
+		else
+		{
+			if(location == "#home")
+			{
+				$.mobile.changePage(location, {transition: "slideup"});
+			}
+			else
+			{
+				$.mobile.changePage(location, {transition: "slidedown"});
+			}
+		}
 		
 	}
 	
@@ -159,9 +223,16 @@
 		}
 	}
 	
+	function keyPress(e)
+	{
+		if(e.keyCode == 13 || e.keyCode == 10) 
+		{
+			e.target.blur();
+		}
+	}
+	
 	function clearAllClick()
 	{
-
 		try
 		{
 			clearRhyme();
@@ -248,6 +319,10 @@
 	{
 		if(!(isSearchingRhyme() || isSearchingMeaning()))
 		{
+			$("#searchPop").show();
+			
+			$.mobile.changePage("#searchPop", "pop", true, true);
+			
 			return;
 		}
 		
@@ -305,6 +380,11 @@
 			fetchRhymesComplete();
 		}
 	}
+	
+	function searchPopClose()
+	{
+		$("#searchPop").hide();
+	}
 
 	function isSearchingRhyme()
 	{
@@ -347,7 +427,6 @@
 
 	function clearScansion()
 	{
-		console.log("Clear");
 		scansion = "";
 		$("#scansionTxt").text("--");
 		$("#scansionSub").text("--");
@@ -649,21 +728,6 @@
 		}
 	}
 
-	function testClick()
-	{
-		var t1 = "Boo";
-		var t2 = "Boo oo";
-
-		if (t1.indexOf(" ") >= 0)
-		{
-			console.log("Nope1");
-		}
-		if (t2.indexOf(" ") >= 0)
-		{
-			console.log("Nope3");
-		}
-	}
-
 	function isScansionMatching(pron)
 	{
 		//var pron = "HH AH0 L OW1";
@@ -793,11 +857,33 @@
 			</ul>
 		</div>
 	</div>
+	
+	
+	<div data-role="popup" id="searchPop" data-dismissible="false">
+
+			<div class="alertDlg">
+				To search, please specify a word to rhyme with or a word to be synonymous with
+				
+				
+				<br/><br/>
+				
+				<a href="#" class="ui-btn ui-btn-b" data-rel="back" onclick="searchPopClose()">OK</a>
+			</div>
+		<!-- /content -->
+
+
+	</div>
+	<!-- /page -->
 
 	<div data-role="page" id="home" data-title="Home" class="homePage">
+	
+	
+			
 
 		<div id="mainPage" data-role="main" class="ui-content">
 			<div class="fieldPage">
+			
+			
 				<div id="resultsBox">
 					<ul id="wordList" data-role="listview">
 					</ul>
@@ -840,29 +926,30 @@
 	</div>
 	<!-- /page -->
 
-	<div data-role="page" id="rhyme" data-title="rhyme" class="rhymePage">
+	<div data-role="page" id="rhyme" data-title="rhyme" class="rhymePage" >
 
 		<div data-role="main" class="ui-content">
 			<div class="fieldPage">
-				<br /> <span class="fieldTitle">Rhymes with:</span> <input
-					data-clear-btn="true" name="rhymeTI" id="rhymeTI" value=""
-					type="text">
+				<form id="rhymeForm" >
+					<br /> <span class="fieldTitle">Rhymes with:</span> <input
+						data-clear-btn="true" name="rhymeTI" id="rhymeTI" value=""
+						type="text" onkeypress="keyPress(event)">
+						
+					<br/>
+					<br/>
 					
-				<br/>
-				<br/>
-				
-				<span class="fieldTxt">Strength of rhyme:</span>
-				
-				
-				<br/>
-				
-				<div class="rhymeSlider">
-					<input id="rhymeStrengthSlider" type="range" name="slider-1" id="slider-1" data-highlight="true" value="75" min="25" max="100" step="25">
-				</div>				
-				
-				<div class="rhymeLowLbl">Lowest</div>
-				<div class="rhymeHighLbl">Highest</div>
-
+					<span class="fieldTxt">Strength of rhyme:</span>
+					
+					
+					<br/>
+					
+					<div class="rhymeSlider">
+						<input id="rhymeStrengthSlider" type="range" name="slider-1" id="slider-1" data-highlight="true" value="75" min="25" max="100" step="25">
+					</div>				
+					
+					<div class="rhymeLowLbl">Lowest</div>
+					<div class="rhymeHighLbl">Highest</div>
+				</form>
 			</div>
 		</div>
 		<!-- /content -->
@@ -872,14 +959,14 @@
 
 
 
-	<div data-role="page" id="meaning" data-title="rhyme"
+	<div data-role="page" id="meaning" data-title="meaning"
 		class="meaningPage">
 
 		<div data-role="main" class="ui-content">
 			<div class="fieldPage">
 
 				<br /> <span class="fieldTitle">Synonymous with:</span> <input
-					name="meaningTI" id="meaningTI" value="" type="text">
+					name="meaningTI" id="meaningTI" value="" type="text" onkeypress="keyPress(event)">
 			</div>
 		</div>
 		<!-- /content -->
@@ -888,14 +975,14 @@
 	</div>
 	<!-- /page -->
 
-	<div data-role="page" id="syllables" data-title="Home"
+	<div data-role="page" id="syllables" data-title="syllables"
 		class="syllablesPage">
 
 		<div data-role="main" class="ui-content">
 			<div class="fieldPage">
 
 				<br /> <span class="fieldTitle">Number of syllables:</span> <input
-					name="syllablesTI" id="syllablesTI" value="" type="number">
+					name="syllablesTI" id="syllablesTI" value="" type="number" onkeypress="keyPress(event)">
 			</div>
 		</div>
 		<!-- /content -->
@@ -904,7 +991,7 @@
 	</div>
 	<!-- /page -->
 
-	<div data-role="page" id="scansion" data-title="rhyme"
+	<div data-role="page" id="scansion" data-title="scansion"
 		class="scansionPage">
 
 		<div data-role="main" class="ui-content">
@@ -942,7 +1029,9 @@
 
 				<div class="infoTxtBox">Pocket Poet is a poet's best friend helping you find words matching your verse.</div>
 				
-				<br/><br/><br/>
+				<br/>
+				
+				<br/><br/>
 				
 				<strong>POWERED BY</strong>
 				<br/><br/>
@@ -960,6 +1049,8 @@
 
 	</div>
 	<!-- /page -->
+	
+	
 	
 	<div data-role="footer" data-position="fixed" data-theme="b"
 		data-tap-toggle="false">
@@ -987,11 +1078,13 @@
 				<li><a href="#" data-icon="delete" onclick="clearAllClick();"><span
 						class="navBtn">Clear All</span></a></li>
 				<li><a href="#" data-icon="search" onclick="searchClick();"><span
-						class="navBtn">Search</span></a></li>
+						class="navBtn">Search</span></a>
+						</li>
 			</ul>
 		</div>
+		
+		
 
 	</div>
-
 </body>
 </html>
