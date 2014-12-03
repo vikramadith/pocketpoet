@@ -307,6 +307,27 @@
 
 		$("#scansionTxt").html(scansion);
 	}
+	
+	function scansionPresets(preset)
+	{
+		scansion = "";
+		var preset;
+		if(preset == "throchee")
+		{
+// 			scansion += "<span class='scansionTextS'>/</span>" + "*";
+			$("#scansionTxt").html("<span class='scansionTextS'>/</span>" + "*");
+		}
+		if(preset == "iamb")
+		{
+// 			scansion += "*" + "<span class='scansionTextS'>/</span>";
+			$("#scansionTxt").html("*" + "<span class='scansionTextS'>/</span>");
+		}
+		if(preset == "pyrrhic")
+		{
+// 			scansion += "<span class='scansionTextS'>//</span>";
+			$("#scansionTxt").html("<span class='scansionTextS'>//</span>");
+		}
+	}
 
 	function doneClick()
 	{
@@ -1012,6 +1033,15 @@
 						<div class="scansionSymbolS">/</div>
 						<div class="scansionTxtBoxS">Stressed</div>
 					</div>
+				</div>
+				<br />
+				<br />
+				<br />
+				<br />
+				<div id="presets" data-role="controlgroup" data-type="horizontal" data-mini="true">
+					<a href="#" class="ui-btn ui-corner-all" onclick=scansionPresets("throchee");>Throchee</a>
+  					<a href="#" class="ui-btn ui-corner-all" onclick=scansionPresets("iamb");>Iamb</a>
+  					<a href="#" class="ui-btn ui-corner-all" onclick=scansionPresets("pyrrhic");>Pyrrhic</a>
 				</div>
 			</div>
 		</div>
