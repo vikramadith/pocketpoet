@@ -1,0 +1,22 @@
+D:\Studio\PocketPoet\pocketpoet\platforms\android\gen\com\bluedurian\pocketpoet\R.java \
+ : D:\Studio\PocketPoet\pocketpoet\platforms\android\res\drawable\icon.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\res\drawable-land-hdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\res\drawable-land-ldpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\res\drawable-land-mdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\res\drawable-land-xhdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\res\drawable-port-hdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\res\drawable-port-ldpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\res\drawable-port-mdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\res\drawable-port-xhdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\res\values\strings.xml \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\res\xml\config.xml \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\bin\res\drawable\icon.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\bin\res\drawable-land-hdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\bin\res\drawable-land-ldpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\bin\res\drawable-land-mdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\bin\res\drawable-land-xhdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\bin\res\drawable-port-hdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\bin\res\drawable-port-ldpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\bin\res\drawable-port-mdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\bin\res\drawable-port-xhdpi\screen.png \
+D:\Studio\PocketPoet\pocketpoet\platforms\android\bin\AndroidManifest.xml \
