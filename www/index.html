@@ -312,7 +312,7 @@
 	{
 		scansion = "";
 		var preset;
-		if(preset == "throchee")
+		if(preset == "trochee")
 		{
 // 			scansion += "<span class='scansionTextS'>/</span>" + "*";
 			$("#scansionTxt").html("<span class='scansionTextS'>/</span>" + "*");
@@ -322,10 +322,10 @@
 // 			scansion += "*" + "<span class='scansionTextS'>/</span>";
 			$("#scansionTxt").html("*" + "<span class='scansionTextS'>/</span>");
 		}
-		if(preset == "pyrrhic")
+		if(preset == "anapest")
 		{
-// 			scansion += "<span class='scansionTextS'>//</span>";
-			$("#scansionTxt").html("<span class='scansionTextS'>//</span>");
+// 			scansion += "*" + "*" + "<span class='scansionTextS'>/</span>";
+			$("#scansionTxt").html("*" + "*" + "<span class='scansionTextS'>/</span>");
 		}
 	}
 
@@ -1020,8 +1020,8 @@
 
 				<br /> <span class="fieldTitle">Ending stress:</span> <br />
 				<div id="scansionTxt" class="scansionText">--</div>
-				<br />
 				<br /> <span class="fieldTxt">Tap below to add stressed or unstressed syllables</span>
+				<br />
 				<div class="scansionControls">
 					<div id="scansionAddUnstressed" class="scansionGrid1"
 						onclick="scansionControlClick(event);">
@@ -1038,10 +1038,13 @@
 				<br />
 				<br />
 				<br />
+				<br />
+				<b> Or choose a preset</b>
+				<br />
 				<div id="presets" data-role="controlgroup" data-type="horizontal" data-mini="true">
-					<a href="#" class="ui-btn ui-corner-all" onclick=scansionPresets("throchee");>Throchee</a>
-  					<a href="#" class="ui-btn ui-corner-all" onclick=scansionPresets("iamb");>Iamb</a>
-  					<a href="#" class="ui-btn ui-corner-all" onclick=scansionPresets("pyrrhic");>Pyrrhic</a>
+					<a href="#" class="ui-btn custom-btn ui-corner-all" onclick=scansionPresets("trochee");>Trochee</a>
+  					<a href="#" class="ui-btn custom-btn" onclick=scansionPresets("iamb");>Iamb</a>
+  					<a href="#" class="ui-btn custom-btn ui-corner-all" onclick=scansionPresets("anapest");>Anapest</a>
 				</div>
 			</div>
 		</div>
